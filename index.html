@@ -3,8 +3,14 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="Slides from a talk at Suffolk LIT Lab's Lookahead event in April 2022"/>
+    <meta property="og:image" content="assets/SuffolkLITLab_logo.svg"/>
+    <meta property="or:url" content="https://brycewilley.xyz/litlookahead-slides"/>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@WowItIsBryce"/>
 
-		<title>LIT Lab's Lookahead</title>
+		<title>Hacking Docassemble Internals</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -13,28 +19,64 @@
 		<!-- Theme used for syntax highlighted code -->
 		<!--link rel="stylesheet" href="plugin/highlight/monokai.css"-->
 		<link rel="stylesheet" href="plugin/highlight/magula.css">
-	</head>
+	  <link rel="icon" type="image/png" href="favicon-32x32.png">
+  </head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section class="title">
-					<h1>LIT Lab's Lookahead</h1>
-          <h2>Bringing the Assembly Line Further</h2>
-					<img height="300" width="300" src="assets/SuffolkLITLab_logo.svg"/>
-					<h3>Bryce Willey <a href="https://twitter.com/wowitisbryce"><img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/twitter-blue.svg"/>@wowitisbryce </a></h3>
-					<h3><a href="https://twitter.com/suffolklitlab"><img style="margin: 0; vertical-align: middle;" height="40" width="40" src="assets/twitter-blue.svg"/>@suffolklitlab</a></h3>
+					<h1>Hacking Docassemble Internals</h1>
+          <h2 class="h3">How to change docassemble</h2>
+					<img height="280" width="280" src="assets/SuffolkLITLab_logo.svg" alt="The Suffolk LIT Lab logo"/>
+					<h3 class="h4">Bryce Willey <a href="https://mastodon.publicinterest.town/@brycew"><img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/mastodon.svg"/>@brycew@publicinterest.town </a> </h3>
+          <h4 class="h5"><a href="https://brycewilley.xyz/docacon23-slides">https://brycewilley.xyz/docacon23-slides</a></h4>
+          <aside class="notes">
+          </aside>
 				</section>
         <section>
-          <h2>The Assembly Line Project</h2>
+          <h2>Hacking on Docassemble core code</h2>
+
+          You can do a lot in docassemble plugins, but sometimes you might need more:
+          * to fix a bug
+          * to improve the playground
+          * to add a feature that needs the engine
+        </section>
+        <section>
+          <h2>Why hack?</h2>
 
           <ul>
-            <li>Started in March 2020</li>
-						<li>200+ volunteers building 30 guided interviews for self represented litigants</li>
-						<li>Allowed emailing to the Appeals and Trial courts</li>
+            <li>It helps you understand Docassemble better</li>
+            <li>Everyone could benefit from your changes</li>
+            <li>It's fun!</li>
           </ul>
+        </section>
+        <section>
+          <h2>The Key components to hacking</h2>
+          <ul>
+            <li>Exploring and Navigating the code</li>
+            <li>reading the code</li>
+            <li>surgical change</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Our example: more font awesome</h2>
+        </section>
+        <section>
+          <h2>Live demo</h2>
+        </section>
+        <section>
+          <h2>Other systems that you might deal with</h2>
+          <ul>
+            <li>Flask</li>
+            <li>Git</li>
+            <li>sqlalchemy</li>
+          </ul>
+        </section>
+        <!--section>
+          <h2>The Assembly Line Project</h2>
 
           <figure>
-            <img width=439 height=350 src="assets/matt-moloney-tccTcNPdkNA-unsplash.jpg" alt="The front window of a house under eviction in Boston"/>
+            <img height=320 src="assets/matt-moloney-tccTcNPdkNA-unsplash.jpg" alt="The front window of a house under eviction in Boston"/>
             <footer><small>
               Photo by 
               <a href="https://unsplash.com/@mattmoloney?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Matt Moloney</a> 
@@ -42,16 +84,38 @@
             </small></footer>
           </figure>
 
+          <ul>
+            <li>March 2020 - Now</li>
+						<li>200+ volunteers building 30 guided interviews for self represented litigants</li>
+          </ul>
+
 					<aside class="notes">
-            I joined the Assembly Line at the end of 2020, and the project had been very successful before then!
-            But looking forward, it would need to change a few things to work in a post COVID world.
+            Our biggest project by far has been the Assembly Line project, and it's best illustrated with a true story. 
+
+            Last summer (2021), a tenant had just lost their housing case in the trial court, and was being actively evicted
+            from their apartment. The constable was there, and furniture was being moved out. That tenant then found our Assembly Line project,
+            which is a website with a collection of guided interviews, which you've seen a few of so far. Specifically, the tenant found 
+            the "motion to stay" interview, which let you fill out a motion to send to the Appeals court to stop an eviction.
+
+            They filled out the motion to stay using our website, claiming the trial court had never addressed the fact they were protected under the CDC's
+            eviction moratorium, and sent the form to the Appeals Court through our site. Within 15 or 20 minutes, the Appeals court review the motion 
+            and granted the stay. The furniture had to be moved back into the house, successfully stopping the eviction.
+            <br/>
+            <br/>
+            This story illustrates what the Assembly Line project is: a collection of 30 or so forms, written by 200+ volunteers at the beginning of
+            the pandemic, and reviewed by subject matter experts. Those forms were written specifically for self represented litigants, people in the court
+            system without lawyers. They were mobile friendly so you could fill them out easily on a phone, and we could directly email them to the Appeals court,
+            thanks to an emergency order given at the start of the pandemic.
+
+            I joined the Assembly Line at the end of 2020, and much of the work was completed before then!
+            I viewed my position as making the Assembly Line easy to use in many different places in different contexts, more than just Massachusetts during the pandemic.
 					</aside>
         </section>
 				<section>
 					<h2>Improvements: E-filing</h2>
 					<ul>
 						<li>long-term email filing is burdensome for courts</li>
-            <li>Same guided interviews, but:
+            <li>Same guided interview UI, but:
             <ul>
               <li>puts info directly into court's case management system</li>
               <li>gets info from courts's system to help users file into existing cases</li>
@@ -59,71 +123,100 @@
             </li>
 					</ul>
           <figure>
-          <img height="400" src="assets/undraw_efile.png"/>
+          <img height="320" src="assets/undraw_efile.png" alt="the drawing of a man standing next to a comically large envelope"/>
           </figure>
+          <aside class="notes">
+            The first of those improvements had to do with e-filing. As I mentioned in the story, the tenant was able to email their forms directly 
+            to the Appeals court. Email filing is good, but in the long term it's a burden for courts. They need to have a completely separate system
+            for handling incoming emails separate from their existing case management system, and if they do accept the case, it needs to be manually copy-pasted
+            into the case management system.
+            <br/>
+            <br/>
+            So for the past year and a half, I've been working so that behind the scenes, all of our existing guided interviews are able to directly e-file into courts' case
+            management systems. Additionally, these interviews can get information from the courts case management systems, letting users file into already existing cases,
+            pre-filling information like the names of other case parties.
+          </aside>
 				</section>
         <section>
-          <h2>Status: E-filing</h2>
+          <h2>E-filing Status</h2>
           <ul>
             <li>Louisiana: ready for Jefferson Parish</li>
             <li>Illinois: paperwork being signed</li>
-						<li>Future: MA, parts of CA</li>
+						<li>Future: MA Appeals Court, parts of CA</li>
 					</ul>
+          <figure>
+            <img height="200" src="assets/LA-flag.png" alt="The state flag of Louisiana"/>
+            <img height="200" src="assets/IL-flag.jpg" alt="The state flag of Illinois"/>
+          </figure>
+          <aside class="notes">
+            Currently, our e-filing system is ready in Jefferson Parish, Louisiana, the paper work is being 
+            signed as we speak for Illinois, and we're working to bring this technology to the Massachusetts Appeals court,
+            and parts of California.
+          </aside>
         </section>
         <section>
 					<h2>Automating the Tedium</h2>
           <ul>
-						<li>It's hard to get 200+ volunteers</li>
-            <li>most places have few dedicated forms people</li>
+						<li>It's hard to get 200+ volunteers: most only have 1 or 2 forms people</li>
+            <li>tools to remove the tedious tasks those volunteers did</li>
           </ul>
           <figure>
-          <img src="assets/zoom.png"/>
+            <img src="assets/zoom.png" alt="All of the Assembly Line volunteers on a Zoom call"/>
           </figure>
+          <aside class="notes">
+
+            The other part off the Assembly Line project that we've been working on improving is the automating the tedium.
+            So I mentioned that we had over 200+ volunteers for the project, which was incredible. But the downside is that
+            it's really hard to get 200+ volunteers! We were incredibly lucky, starting at the beginning of the pandemic when
+            a lot of people had free time that they wanted to use to help others.
+            <br/>
+            <br/>
+            Since not every legal aid or court system can get that many volunteers, we've been working on a set of tools that can take
+            some of the more tedious work that the volunteers did, and make it so one or two people in a legal aid or court system can
+            do a lot of the same work that those volunteers did, but faster.
+          </aside>
         </section>
 				<section>
-					<h2>Form Explorer</h2>
+					<h2>Discovering: Form Explorer</h2>
           <ul>
 					  <li>Look at an entire jurisdiction's forms in bulk</li>
-            <li>Currently <a href="https://suffolklitlab.org/form-explorer/">in Alpha</a>!</li>
-            <li>Beta with lots of new states coming soon!</li>
+            <li>Currently in alpha: <a href="https://suffolklitlab.org/form-explorer/">https://suffolklitlab.org/form-explorer</a></li>
+            <li>Beta with more states coming soon, thanks to work by:</li>
+            <ul>
+              <li><a href="https://www.linkedin.com/in/pavlos-rousoglou/">Pavlos Rousoglou</a></li>
+              <li>Lera Somova</li>
+            </ul>
           </ul>
           <figure>
-          <img height="400" src="assets/undraw_explorer.png"/>
+            <img height="320" src="assets/undraw_explorer.png" alt="a drawing of a man looking at a data dashboard over a map of the world"/>
           </figure>
+          <aside class="notes">
+          </aside>
 				</section>
         <section>
           <h2>Prototyping: Weaver</h2>
           <ul>
-            <li>turn those forms into ready to edit guided interview drafts in one click</li>
+            <li>turn those forms into ready-to-edit guided interview drafts in one click</li>
           </ul>
           <figure>
-          <img src="assets/weaver-logo.png"/>
+            <img width="400" src="assets/weaver-logo.png" alt="The Weaver logo, stylized as a loom punch-card/>
+            <img height="400" src="assets/undraw_weaver.png" alt="a drawing of a man holding up an app design, with an arrow pointing to a completed phone app"/>
           </figure>
-          <img height="400" src="assets/undraw_weaver.png"/>
+          <aside class="notes">
+          </aside>
         </section>
         <section>
           <h2>Refining: LIT Styler</h2>
           <ul>
             <li>get actionable feedback on where to improve your interview</li>
-            <li>Alpha of LIT Style in a few months</li>
+            <li><a href="https://apps-dev.suffolklitlab.org/start/ALLinter/linter/">prototype</a> out now; alpha in a few months</li>
           </ul>
           <figure>
-          <img height="400" src="assets/undraw_styler.png"/>
+            <img height="400" src="assets/undraw_styler.png" alt="a drawing of a man, putting together pieces of a puzzle in a GUI window"/>
           </figure>
-        </section>
-				<section>
-          <h2>More to Come!</h2>
-          <div style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-around">
-            <img src="assets/weaver-logo.png"/>
-            <img src="assets/SuffolkLITLab_logo.svg"/>
-          </div>
-
-					<aside class="notes">
-						Tyler is the biggest EFM, but there are others: Michigan, Utah (Tybera), Arizona, etc.
-
-						Some of the REST API requires quite of bit of docassemble features (specific attributes in the JSON, etc.)
-					</aside>
-				</section>
+          <aside class="notes">
+          </aside>
+				</section-->
 			</div>
 		</div>
 
@@ -137,10 +230,10 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-
 				center: false,
 				transitionSpeed: 'fast',
-
+        // Uncomment after presentation
+        showNotes: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
