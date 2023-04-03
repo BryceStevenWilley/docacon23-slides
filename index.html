@@ -7,8 +7,6 @@
     <meta property="og:description" content="Slides from a talk at Suffolk LIT Lab's Lookahead event in April 2022"/>
     <meta property="og:image" content="assets/SuffolkLITLab_logo.svg"/>
     <meta property="or:url" content="https://brycewilley.xyz/litlookahead-slides"/>
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@WowItIsBryce"/>
 
 		<title>Hacking Docassemble Internals</title>
 
@@ -25,52 +23,219 @@
 		<div class="reveal">
 			<div class="slides">
 				<section class="title">
-					<h1>Hacking Docassemble Internals</h1>
-          <h2 class="h3">How to change docassemble</h2>
-					<img height="280" width="280" src="assets/SuffolkLITLab_logo.svg" alt="The Suffolk LIT Lab logo"/>
-					<h3 class="h4">Bryce Willey <a href="https://mastodon.publicinterest.town/@brycew"><img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/mastodon.svg"/>@brycew@publicinterest.town </a> </h3>
+					<h1><span class="hacker">Hacking</span> Docassemble Internals</h1>
+          <!--h2 class="h3">How to change docassemble</h2-->
+					<img height="200" width="200" src="assets/SuffolkLITLab_logo.svg" alt="The Suffolk LIT Lab logo"/>
+					<h3 class="h4">Bryce Willey</h3> <a href="https://mastodon.publicinterest.town/@brycew"><!--img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/mastodon-logo.svg"/-->@brycew@publicinterest.town </a> </h3>
           <h4 class="h5"><a href="https://brycewilley.xyz/docacon23-slides">https://brycewilley.xyz/docacon23-slides</a></h4>
           <aside class="notes">
           </aside>
 				</section>
         <section>
-          <h2>Hacking on Docassemble core code</h2>
+          <h2>Why <span class="hacker">hack</span>?</h2>
+        
+          <div class="r-stack">
+          <img class="fragment fade-out" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800" src="assets/cat_bug2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800" src="assets/cat_tower.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/cat.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="3" height="600" width="800" src="assets/cat_community.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          </div>
 
-          You can do a lot in docassemble plugins, but sometimes you might need more:
-          * to fix a bug
-          * to improve the playground
-          * to add a feature that needs the engine
+          <aside class="notes">
+            You can do a lot in docassemble packages already; why bother with changing docassemble itself?
+            <ul>
+            <li>to improve docassemble itself:<ul>
+              <li>to fix a bug</li>
+              <li>to improve the playground</li>
+              <li>to add a feature to the main engine</li>
+            </ul>
+            <li>you'll understand docassemble better</li>
+            <li>everyone could benefit from your changes</li>
+            <li>it's fun!</li>
+            </ul>
+          </aside>
         </section>
         <section>
-          <h2>Why hack?</h2>
-
+          <h2>Here comes the <span class="hacker">firehose</span></h2>
+          <img class="r-stretch" src="assets/cat_firehose.svg"/>
+          <p>Don't memorize all of this: it's <a href="https://docassemble.org/docs/development.html#core">in the docs</a></p>
+          <aside class="notes">
+            My first run through of this talk I explained everything I could as much as I could and it took an hour; unfortunately, I don't have
+            an hour.
+          </aside>
+        </section>
+        <section>
+          <h2>Some starting assumptions:</h2>
           <ul>
-            <li>It helps you understand Docassemble better</li>
-            <li>Everyone could benefit from your changes</li>
-            <li>It's fun!</li>
+            <li>docassemble</li>
+            <li>python</li>
+            <li>Folder structures</li>
+            <!--li>git?</li-->
+          </ul>
+          <aside class="notes">
+            You'll have to know how to use docassemble to come up with ways to improve it!
+
+            You probably know enough python to follow along; basic functions, modules, and types like strings
+
+            You don't really need to know git, but it is something that I'm not gonna have time to cover. I'd
+            recommend using VSCode's git extension, and there are a few good UIs for it that you could try out.
+          </aside>
+        </section>
+        <section>
+          <h2>Don't have time to cover:
+          </h2>
+          <ul>
+            <li>GitHub</li>
+            <li>HTML</li>
+            <li>Command Line / Shell / Bash</li>
           </ul>
         </section>
-        <section>
-          <h2>The Key components to hacking</h2>
-          <ul>
-            <li>Exploring and Navigating the code</li>
-            <li>reading the code</li>
-            <li>surgical change</li>
-          </ul>
         </section>
         <section>
+            <h3>Install an editor</h3>
+            <p>I recommend VSCode, but anything works</p>
+            <img height="550" src="assets/vscode.png">
+            <aside class="notes">
+              On windows, VSCode can access your code in WSL, which is where we put it.
+            </aside>
+        </section>
+        <section>
+          <h2>Install docker</h2>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/install/ubuntu/">On Ubuntu Linux</a></li>
+            <li><a href="https://docs.docker.com/desktop/install/mac-install/">On Mac</a></li>
+            <li><a href="https://docs.docker.com/desktop/install/windows-install/">On Windows</a>
+              <ul>
+                <li><a href="">Setup WSL 2</a> and then <a href="https://docs.docker.com/desktop/install/ubuntu/">install on WSL's Ubuntu</a> (Recommended)</li>
+                <li><a href="https://docs.docker.com/desktop/install/windows-install/">With docker desktop</a></li>
+              </ul>
+            </li>
+          </ul>
+          <aside class="notes">
+            We'll start with it already installed and the docker container running, but still talk about these here.
+          </aside>
+        </section>
+        <!--section>
+          <h2>Make your <span class="hacker">Fork</span> on GitHub</h2>
+        </section-->
+        <section>
+          <h2>Docker terminology</h2>
+          <ul>
+            <li class="fragment" data-fragment-index="0">container</li>
+            <li class="fragment" data-fragment-index="1">image</li>
+            <li class="fragment" data-fragment-index="2">volume</li>
+          </ul>
+          <div class="r-stack">
+          <img class="fragment current-visible" data-fragment-index="0" height="400" src="assets/virtual-box-screenshot.png" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="1" height="400" src="assets/all-folders.jpg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment" data-fragment-index="2" height="400" src="assets/flash-drive.jpeg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          </div>
+        </section>
+        <!--section>
+          <h2>Shell terminology</h2>
+
+          <ul>
+            <li class="fragment" data-fragment-index="0">Command line ≈ Shell ≈ Bash</p>
+            <li class="fragment" data-fragment-index="1">the prompt will help you orient yourself</li>
+            <li class="fragment">directories = folders</li>
+          </ul>
+          <div class="r-stack">
+          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800" src="assets/cat.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/macos-folder-icon.jpg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          </div>
+        </section-->
+        <section>
+          <h2>Run docker</h2>
+          <section>
+            <pre><code data-trim data-noescape class="language-bash" data-line-numbers="1|2|3-10|6|8">
+              git clone https://github.com/jhpyle/docassemble
+              docker pull jhyple/docassemble
+              docker run \
+                  --env WWWUID=`id -u` \
+                  --env WWWGID=`id -g` \
+                  --name mydocassemble
+                  -p 80:80 \
+                  -v ./docassemble:/tmp/docassemble \
+                  -d \
+                  jhpyle/docassemble
+            </code></pre>
+          </section>
+          <section>
+            <h3>Fancy running docker</h3>
+            <pre><code data-trim data-noescape class="language-bash">
+                docker run \
+                    --cap-add SYS_PTRACE \
+                    --memory="4gb" \
+                    ... # same as before
+            </code></pre>
+          </section>
+        </section>
+        <!--section>
           <h2>Our example: more font awesome</h2>
           https://github.com/jhpyle/docassemble/pull/614/files
-        </section>
+        </section-->
+        <!--section>
+          <h2>Shell Commands</h2>
+
+          <ul>
+            <li class="fragment">"ls" means "list"</li>
+            <li class="fragment">"cd" means "change directory"</li>
+            <li class="fragment">"pwd" means "print working directory" (or current directory)</li>
+          </ul>
+        </section-->
+        <!--section>
+          <h2>Hello world!</h2>
+          <section>
+            <h3>Edit a prominent page</h3>
+            <div class="r-stack">
+              <img class="fragment" height="500" src="assets/hello-world-pre.png" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+              <img class="fragment" height="500" src="assets/hello-world-update.png" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+            </div>
+          </section>
+        </section-->
         <section>
-          <h2>Live demo</h2>
+          <section>
+            <h2>Our change: more logs</h2>
+            <img height="550" src="assets/logs-page-pre.png">
+          </section>
+          <section>
+            <h2>The Key components to hacking</h2>
+            <ul>
+              <li>Exploring and Navigating the code</li>
+              <li>reading the code</li>
+              <li>surgical change</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Open a shell in docassemble</h3>
+            <pre><code data-trim data-noescape class="language-bash">
+                docker exec -it mydocassemble /bin/bash
+            </code></pre>
+            The prompt will change to "root@a54e5b3:/#"
+            <pre><code data-trim data-noescape class="language-bash">
+                su www-data
+                source /usr/share/docassemble/local3.10/bin/activate
+                cd /tmp/docassemble
+                pip install --no-deps --no-index \
+                    --force-reinstall --upgrade \
+                    ./docassemble_base ./docassemble_webapp ./docassemble_demo ./docassemble
+                touch /usr/share/docassemble/webapp/docassemble.wsgi
+            </code></pre>
+          </section>
         </section>
         <section>
           <h2>Other systems that you might deal with</h2>
           <ul>
             <li>Flask</li>
-            <li>Git</li>
+            <li>Git (used from in docassemble)</li>
+            <li>Pikepdf</li>
             <li>sqlalchemy</li>
+            <li>redis</li>
+            <li>celery</li>
           </ul>
         </section>
         <!--section>
@@ -231,10 +396,10 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-				center: false,
+				center: true,
 				transitionSpeed: 'fast',
         // Uncomment after presentation
-        showNotes: true,
+        // showNotes: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
