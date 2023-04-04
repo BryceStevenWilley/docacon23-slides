@@ -97,7 +97,7 @@
           <ul>
             <li>GitHub</li>
             <li>HTML</li>
-            <li>Command Line / Shell / Bash</li>
+            <li>Terminal / Shell / Bash</li>
           </ul>
         </section>
         </section>
@@ -110,6 +110,13 @@
             </aside>
         </section>
         <section>
+          <h2>The Terminal</h2>
+          <ul>
+            <li>Linux and Mac can use your <a href="https://support.apple.com/guide/terminal/welcome/mac">default terminal programs</a></li>
+            <li>Windows:<a href="https://learn.microsoft.com/en-us/windows/wsl/install">Setup WSL 2</a></li>
+          </ul>
+        </section>
+        <section>
             <h2>Download Docassemble</h2>
             <pre><code data-trim data-noescape class="language-bash">
               # If on WSL2 or Linux (no need on Mac)
@@ -120,11 +127,11 @@
         <section>
           <h2>Install <span class="hacker">Docker</span></h2>
           <ul>
-            <li><a href="https://docs.docker.com/engine/install/ubuntu/">On Ubuntu Linux</a></li>
-            <li><a href="https://docs.docker.com/desktop/install/mac-install/">On Mac</a></li>
-            <li><a href="https://docs.docker.com/desktop/install/windows-install/">On Windows</a>
+            <li><a href="https://docs.docker.com/engine/install/ubuntu/">Ubuntu Linux</a></li>
+            <li><a href="https://docs.docker.com/desktop/install/mac-install/">Mac</a></li>
+            <li><a href="https://docs.docker.com/desktop/install/windows-install/">Windows</a>
               <ul>
-                <li><a href="">Setup WSL 2</a> and then <a href="https://docs.docker.com/desktop/install/ubuntu/">install on WSL's Ubuntu</a> (Recommended)</li>
+                <li><a href="https://docs.docker.com/desktop/install/ubuntu/">install on WSL's Ubuntu</a> (Recommended)</li>
                 <li><a href="https://docs.docker.com/desktop/install/windows-install/">With docker desktop</a></li>
               </ul>
             </li>
@@ -230,15 +237,15 @@
 
           <div class="r-stack">
           <img class="fragment fade-out" data-fragment-index="0" height="550" src="assets/only-last-search.png" 
-              alt="The docassemble logo, a black cat">
+              alt="A screen shot of 'Only the last 30 lines' in the VS Code search bar, with results below">
           <img class="fragment current-visible" data-fragment-index="0" height="300" src="assets/only-last-file.png" 
-              alt="The docassemble cat, with ladybug wings on it's back and an antenna">
+              alt="A screenshot of the `logs.html` file, that contains the words 'Only the last 30 lines'">
           <img class="fragment current-visible" data-fragment-index="1" height="250" src="assets/logs-search.png" 
-              alt="The docassemble cat, on top of a picture of a cat tower, or a cat condo">
+              alt="A screenshot of the VS code search bar, this time with 'logs.html' in it">
           <img class="fragment current-visible" data-fragment-index="2" height="550" src="assets/logs-file.png" 
-              alt="The docassemble cat, with a window opening into its side to reveal that the python logo inside the cat">
+              alt="The code in `server.py` in the `logs` function">
           <img class="fragment" height="550" src="assets/logs-60.png"
-              alt="The docassemble cat, under an umbrella on the sandy beach">
+              alt="The same code as above, but changed to include the last 60 lines instead of the last 30">
           </div>
           </section>
         </section>
@@ -273,88 +280,6 @@
 
           <img src="assets/lion-king-cat.jpg">
         </section>
-        <!--section>
-          <h2>The Assembly Line Project</h2>
-
-          <figure>
-            <img height=320 src="assets/matt-moloney-tccTcNPdkNA-unsplash.jpg" alt="The front window of a house under eviction in Boston"/>
-            <footer><small>
-              Photo by 
-              <a href="https://unsplash.com/@mattmoloney?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Matt Moloney</a> 
-              on <a href="https://unsplash.com/s/photos/eviction?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-            </small></footer>
-          </figure>
-
-          <ul>
-            <li>March 2020 - Now</li>
-						<li>200+ volunteers building 30 guided interviews for self represented litigants</li>
-          </ul>
-
-					<aside class="notes">
-            Our biggest project by far has been the Assembly Line project, and it's best illustrated with a true story. 
-
-            Last summer (2021), a tenant had just lost their housing case in the trial court, and was being actively evicted
-            from their apartment. The constable was there, and furniture was being moved out. That tenant then found our Assembly Line project,
-            which is a website with a collection of guided interviews, which you've seen a few of so far. Specifically, the tenant found 
-            the "motion to stay" interview, which let you fill out a motion to send to the Appeals court to stop an eviction.
-
-            They filled out the motion to stay using our website, claiming the trial court had never addressed the fact they were protected under the CDC's
-            eviction moratorium, and sent the form to the Appeals Court through our site. Within 15 or 20 minutes, the Appeals court review the motion 
-            and granted the stay. The furniture had to be moved back into the house, successfully stopping the eviction.
-            <br/>
-            <br/>
-            This story illustrates what the Assembly Line project is: a collection of 30 or so forms, written by 200+ volunteers at the beginning of
-            the pandemic, and reviewed by subject matter experts. Those forms were written specifically for self represented litigants, people in the court
-            system without lawyers. They were mobile friendly so you could fill them out easily on a phone, and we could directly email them to the Appeals court,
-            thanks to an emergency order given at the start of the pandemic.
-
-            I joined the Assembly Line at the end of 2020, and much of the work was completed before then!
-            I viewed my position as making the Assembly Line easy to use in many different places in different contexts, more than just Massachusetts during the pandemic.
-					</aside>
-        </section>
-				<section>
-					<h2>Improvements: E-filing</h2>
-					<ul>
-						<li>long-term email filing is burdensome for courts</li>
-            <li>Same guided interview UI, but:
-            <ul>
-              <li>puts info directly into court's case management system</li>
-              <li>gets info from courts's system to help users file into existing cases</li>
-            </ul> 
-            </li>
-					</ul>
-          <figure>
-          <img height="320" src="assets/undraw_efile.png" alt="the drawing of a man standing next to a comically large envelope"/>
-          </figure>
-          <aside class="notes">
-            The first of those improvements had to do with e-filing. As I mentioned in the story, the tenant was able to email their forms directly 
-            to the Appeals court. Email filing is good, but in the long term it's a burden for courts. They need to have a completely separate system
-            for handling incoming emails separate from their existing case management system, and if they do accept the case, it needs to be manually copy-pasted
-            into the case management system.
-            <br/>
-            <br/>
-            So for the past year and a half, I've been working so that behind the scenes, all of our existing guided interviews are able to directly e-file into courts' case
-            management systems. Additionally, these interviews can get information from the courts case management systems, letting users file into already existing cases,
-            pre-filling information like the names of other case parties.
-          </aside>
-				</section>
-        <section>
-          <h2>E-filing Status</h2>
-          <ul>
-            <li>Louisiana: ready for Jefferson Parish</li>
-            <li>Illinois: paperwork being signed</li>
-						<li>Future: MA Appeals Court, parts of CA</li>
-					</ul>
-          <figure>
-            <img height="200" src="assets/LA-flag.png" alt="The state flag of Louisiana"/>
-            <img height="200" src="assets/IL-flag.jpg" alt="The state flag of Illinois"/>
-          </figure>
-          <aside class="notes">
-            Currently, our e-filing system is ready in Jefferson Parish, Louisiana, the paper work is being 
-            signed as we speak for Illinois, and we're working to bring this technology to the Massachusetts Appeals court,
-            and parts of California.
-          </aside>
-        </section-->
 			</div>
 		</div>
 
