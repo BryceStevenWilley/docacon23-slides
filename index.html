@@ -35,12 +35,18 @@
           <h2>Why <span class="hacker">hack</span>?</h2>
         
           <div class="r-stack">
-          <img class="fragment fade-out" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800" src="assets/cat_bug2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800" src="assets/cat_tower.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/cat.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="3" height="600" width="800" src="assets/cat_community.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment fade-out" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg" 
+              alt="The docassemble logo, a black cat">
+          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800" src="assets/cat_bug2.svg" 
+              alt="The docassemble cat, with ladybug wings on it's back and an antenna">
+          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800" src="assets/cat_tower.svg" 
+              alt="The docassemble cat, on top of a picture of a cat tower, or a cat condo">
+          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/cat.svg" 
+              alt="The docassemble cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="3" height="600" width="800" src="assets/cat_community.svg" 
+              alt="A group of six docassemble cats, facing each other">
+          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" 
+              alt="The docassemble cat, under an umbrella on the sandy beach">
           </div>
 
           <aside class="notes">
@@ -59,7 +65,7 @@
         </section>
         <section>
           <h2>Here comes the <span class="hacker">firehose</span></h2>
-          <img class="r-stretch" src="assets/cat_firehose.svg"/>
+          <img class="r-stretch" src="assets/cat_firehose.svg" alt="The docassemble cat with a red fire hose, spraying a forceful blast of water"/>
           <p>Don't memorize all of this: it's <a href="https://docassemble.org/docs/development.html#core">in the docs</a></p>
           <aside class="notes">
             My first run through of this talk I explained everything I could as much as I could and it took an hour; unfortunately, I don't have
@@ -67,11 +73,12 @@
           </aside>
         </section>
         <section>
+          <section>
           <h2>Some starting assumptions:</h2>
           <ul>
-            <li>docassemble</li>
-            <li>python</li>
-            <li>Folder structures</li>
+            <li class="fragment" data-fragment-index="0"><a href="https://docassemble.org/docs/helloworld.html">docassemble</a></li>
+            <li class="fragment" data-fragment-index="1"><a href="https://www.python.org/about/gettingstarted/">python</a></li>
+            <li class="fragment" data-fragment-index="2">Folder structures</li>
             <!--li>git?</li-->
           </ul>
           <aside class="notes">
@@ -82,6 +89,7 @@
             You don't really need to know git, but it is something that I'm not gonna have time to cover. I'd
             recommend using VSCode's git extension, and there are a few good UIs for it that you could try out.
           </aside>
+          </section>
         </section>
         <section>
           <h2>Don't have time to cover:
@@ -94,15 +102,23 @@
         </section>
         </section>
         <section>
-            <h3>Install an editor</h3>
-            <p>I recommend VSCode, but anything works</p>
-            <img height="550" src="assets/vscode.png">
+            <h2>Install an editor</h2>
+            <p>I recommend <a href="https://code.visualstudio.com/">VSCode</a>, but anything works</p>
+            <img height="500" src="assets/vscode.png" alt="A screenshot of visual studio code editor">
             <aside class="notes">
               On windows, VSCode can access your code in WSL, which is where we put it.
             </aside>
         </section>
         <section>
-          <h2>Install docker</h2>
+            <h2>Download Docassemble</h2>
+            <pre><code data-trim data-noescape class="language-bash">
+              # If on WSL2 or Linux (no need on Mac)
+              sudo apt install git
+              git clone https://github.com/jhpyle/docassemble
+            </code></pre>
+        </section>
+        <section>
+          <h2>Install <span class="hacker">Docker</span></h2>
           <ul>
             <li><a href="https://docs.docker.com/engine/install/ubuntu/">On Ubuntu Linux</a></li>
             <li><a href="https://docs.docker.com/desktop/install/mac-install/">On Mac</a></li>
@@ -121,16 +137,16 @@
           <h2>Make your <span class="hacker">Fork</span> on GitHub</h2>
         </section-->
         <section>
-          <h2>Docker terminology</h2>
+          <h2><span class="hacker">Docker</span> terminology</h2>
           <ul>
             <li class="fragment" data-fragment-index="0">container</li>
             <li class="fragment" data-fragment-index="1">image</li>
             <li class="fragment" data-fragment-index="2">volume</li>
           </ul>
           <div class="r-stack">
-          <img class="fragment current-visible" data-fragment-index="0" height="400" src="assets/virtual-box-screenshot.png" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="1" height="400" src="assets/all-folders.jpg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment" data-fragment-index="2" height="400" src="assets/flash-drive.jpeg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="0" height="400" src="assets/virtual-box-screenshot.png" alt="A screenshot of Virtual Box, running Ubuntu Linux on a Windows computer">
+          <img class="fragment current-visible" data-fragment-index="1" height="400" src="assets/all-folders.jpg" alt="A nested tree of folders">
+          <img class="fragment" data-fragment-index="2" height="400" src="assets/flash-drive.jpeg" alt="An image of a flash drive">
           </div>
         </section>
         <!--section>
@@ -149,10 +165,9 @@
           </div>
         </section-->
         <section>
-          <h2>Run docker</h2>
+          <h2>Run <span class="harkec">Docker</span></h2>
           <section>
-            <pre><code data-trim data-noescape class="language-bash" data-line-numbers="1|2|3-10|6|8">
-              git clone https://github.com/jhpyle/docassemble
+            <pre><code data-trim data-noescape class="language-bash" data-line-numbers="1|2-9|5|7">
               docker pull jhyple/docassemble
               docker run \
                   --env WWWUID=`id -u` \
@@ -165,7 +180,7 @@
             </code></pre>
           </section>
           <section>
-            <h3>Fancy running docker</h3>
+            <h3>Some extra tips</h3>
             <pre><code data-trim data-noescape class="language-bash">
                 docker run \
                     --cap-add SYS_PTRACE \
@@ -198,18 +213,18 @@
           </section>
         </section-->
         <section>
-          <section>
-            <h2>Our change: more logs</h2>
-            <img height="550" src="assets/logs-page-pre.png">
-          </section>
-          <section>
-            <h2>The Key components to hacking</h2>
-            <ul>
-              <li>Exploring and Navigating the code</li>
-              <li>reading the code</li>
-              <li>surgical change</li>
-            </ul>
-          </section>
+          <h2>Our change: <span class="hacker">more logs</span></h2>
+          <img height="500" src="assets/logs-page-pre.png">
+        </section>
+        <section>
+          <h2>The Key components to <span class="hacker">hacking</span></h2>
+          <ul>
+            <li>Exploring and Navigating the code</li>
+            <li>reading the code</li>
+            <li>surgical change</li>
+          </ul>
+        </section>
+        <section>
           <section>
             <h3>Open a shell in docassemble</h3>
             <pre><code data-trim data-noescape class="language-bash">
@@ -319,70 +334,7 @@
             signed as we speak for Illinois, and we're working to bring this technology to the Massachusetts Appeals court,
             and parts of California.
           </aside>
-        </section>
-        <section>
-					<h2>Automating the Tedium</h2>
-          <ul>
-						<li>It's hard to get 200+ volunteers: most only have 1 or 2 forms people</li>
-            <li>tools to remove the tedious tasks those volunteers did</li>
-          </ul>
-          <figure>
-            <img src="assets/zoom.png" alt="All of the Assembly Line volunteers on a Zoom call"/>
-          </figure>
-          <aside class="notes">
-
-            The other part off the Assembly Line project that we've been working on improving is the automating the tedium.
-            So I mentioned that we had over 200+ volunteers for the project, which was incredible. But the downside is that
-            it's really hard to get 200+ volunteers! We were incredibly lucky, starting at the beginning of the pandemic when
-            a lot of people had free time that they wanted to use to help others.
-            <br/>
-            <br/>
-            Since not every legal aid or court system can get that many volunteers, we've been working on a set of tools that can take
-            some of the more tedious work that the volunteers did, and make it so one or two people in a legal aid or court system can
-            do a lot of the same work that those volunteers did, but faster.
-          </aside>
-        </section>
-				<section>
-					<h2>Discovering: Form Explorer</h2>
-          <ul>
-					  <li>Look at an entire jurisdiction's forms in bulk</li>
-            <li>Currently in alpha: <a href="https://suffolklitlab.org/form-explorer/">https://suffolklitlab.org/form-explorer</a></li>
-            <li>Beta with more states coming soon, thanks to work by:</li>
-            <ul>
-              <li><a href="https://www.linkedin.com/in/pavlos-rousoglou/">Pavlos Rousoglou</a></li>
-              <li>Lera Somova</li>
-            </ul>
-          </ul>
-          <figure>
-            <img height="320" src="assets/undraw_explorer.png" alt="a drawing of a man looking at a data dashboard over a map of the world"/>
-          </figure>
-          <aside class="notes">
-          </aside>
-				</section>
-        <section>
-          <h2>Prototyping: Weaver</h2>
-          <ul>
-            <li>turn those forms into ready-to-edit guided interview drafts in one click</li>
-          </ul>
-          <figure>
-            <img width="400" src="assets/weaver-logo.png" alt="The Weaver logo, stylized as a loom punch-card/>
-            <img height="400" src="assets/undraw_weaver.png" alt="a drawing of a man holding up an app design, with an arrow pointing to a completed phone app"/>
-          </figure>
-          <aside class="notes">
-          </aside>
-        </section>
-        <section>
-          <h2>Refining: LIT Styler</h2>
-          <ul>
-            <li>get actionable feedback on where to improve your interview</li>
-            <li><a href="https://apps-dev.suffolklitlab.org/start/ALLinter/linter/">prototype</a> out now; alpha in a few months</li>
-          </ul>
-          <figure>
-            <img height="400" src="assets/undraw_styler.png" alt="a drawing of a man, putting together pieces of a puzzle in a GUI window"/>
-          </figure>
-          <aside class="notes">
-          </aside>
-				</section-->
+        </section-->
 			</div>
 		</div>
 
