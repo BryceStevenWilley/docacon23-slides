@@ -1,95 +1,149 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="Slides from a talk at Suffolk LIT Lab's Lookahead event in April 2022"/>
-    <meta property="og:image" content="assets/SuffolkLITLab_logo.svg"/>
-    <meta property="or:url" content="https://brycewilley.xyz/litlookahead-slides"/>
 
-		<title>Hacking Docassemble Internals</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Slides from a talk at Suffolk LIT Lab's Lookahead event in April 2022" />
+  <meta property="og:image" content="assets/SuffolkLITLab_logo.svg" />
+  <meta property="or:url" content="https://brycewilley.xyz/litlookahead-slides" />
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/suffolk.css">
+  <title>Hacking Docassemble Internals</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<!--link rel="stylesheet" href="plugin/highlight/monokai.css"-->
-		<link rel="stylesheet" href="plugin/highlight/magula.css">
-	  <link rel="icon" type="image/png" href="favicon-32x32.png">
-  </head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section class="title">
-					<h1><span class="hacker">Hacking</span> Docassemble Internals</h1>
-          <!--h2 class="h3">How to change docassemble</h2-->
-					<img height="200" width="200" src="assets/SuffolkLITLab_logo.svg" alt="The Suffolk LIT Lab logo"/>
-					<h3 class="h4">Bryce Willey</h3> <a href="https://mastodon.publicinterest.town/@brycew"><!--img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/mastodon-logo.svg"/-->@brycew@publicinterest.town </a> </h3>
-          <h4 class="h5"><a href="https://brycewilley.xyz/docacon23-slides">https://brycewilley.xyz/docacon23-slides</a></h4>
-          <aside class="notes">
-          </aside>
-				</section>
-        <section>
-          <h2>Why <span class="hacker">hack</span>?</h2>
-        
-          <div class="r-stack">
-          <img class="fragment fade-out" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg" 
-              alt="The docassemble logo, a black cat">
-          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800" src="assets/cat_bug2.svg" 
-              alt="The docassemble cat, with ladybug wings on it's back and an antenna">
-          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800" src="assets/cat_tower.svg" 
-              alt="The docassemble cat, on top of a picture of a cat tower, or a cat condo">
-          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/cat.svg" 
-              alt="The docassemble cat, with a window opening into its side to reveal that the python logo inside the cat">
-          <img class="fragment current-visible" data-fragment-index="3" height="600" width="800" src="assets/cat_community.svg" 
-              alt="A group of six docassemble cats, facing each other">
-          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" 
-              alt="The docassemble cat, under an umbrella on the sandy beach">
-          </div>
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/suffolk.css">
 
-          <aside class="notes">
-            You can do a lot in docassemble packages already; why bother with changing docassemble itself?
-            <ul>
-            <li>to improve docassemble itself:<ul>
-              <li>to fix a bug</li>
-              <li>to improve the playground</li>
-              <li>to add a feature to the main engine</li>
-            </ul>
-            <li>you'll understand docassemble better</li>
-            <li>everyone could benefit from your changes</li>
-            <li>it's fun!</li>
-            </ul>
-          </aside>
-        </section>
-        <section>
-          <h2>Here comes the <span class="hacker">firehose</span></h2>
-          <img class="r-stretch" src="assets/cat_firehose.svg" alt="The docassemble cat with a red fire hose, spraying a forceful blast of water"/>
-          <p>Don't memorize all of this: it's <a href="https://docassemble.org/docs/development.html#core">in the docs</a></p>
-          <aside class="notes">
-            My first run through of this talk I explained everything I could as much as I could and it took an hour; unfortunately, I don't have
-            an hour.
-          </aside>
-        </section>
-        <section>
-          <section>
+  <!-- Theme used for syntax highlighted code -->
+  <!--link rel="stylesheet" href="plugin/highlight/monokai.css"-->
+  <link rel="stylesheet" href="plugin/highlight/magula.css">
+  <link rel="icon" type="image/png" href="favicon-32x32.png">
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title">
+        <h1><span class="hacker">Hacking</span> Docassemble Internals</h1>
+        <!--h2 class="h3">How to change docassemble</h2-->
+        <img height="200" width="200" src="assets/SuffolkLITLab_logo.svg" alt="The Suffolk LIT Lab logo" />
+        <h3 class="h4">Bryce Willey</h3> <a href="https://mastodon.publicinterest.town/@brycew">
+          <!--img style="margin: 0; vertical-align: middle;" height="40" width="40px" src="assets/mastodon-logo.svg"/-->@brycew@publicinterest.town
+        </a> </h3>
+        <h4 class="h5"><a href="https://brycewilley.xyz/docacon23-slides">https://brycewilley.xyz/docacon23-slides</a>
+        </h4>
+        <aside class="notes">
+          My name is Bryce Willey. I am a clinical fellow with the Suffolk LIT lab, and for the past two and
+          a half years, I have been learning Docassemble, and hacking on the internals:
+          <ul>
+            <li>
+            fixing bugs,
+            </li>
+            <li>
+            improving the experiences,
+            </li>
+            <li>
+            adding new features,
+            </li>
+            <li>
+            and other nice things!
+            </li>
+          </ul>>
+          I want to teach all of you how to do the
+          same. (Including those reading these slide notes! Hello!) 
+          </ul>
+        </aside>
+      </section>
+      <section>
+        <h2>Why <span class="hacker">hack</span>?</h2>
+
+        <div class="r-stack">
+          <img class="fragment fade-out" data-fragment-index="0" height="600" width="800" src="assets/cat_ori.svg"
+            alt="The docassemble logo, a black cat">
+          <img class="fragment current-visible" data-fragment-index="0" height="600" width="800"
+            src="assets/cat_bug2.svg" alt="The docassemble cat, with ladybug wings on it's back and an antenna">
+          <img class="fragment current-visible" data-fragment-index="1" height="600" width="800"
+            src="assets/cat_tower.svg" alt="The docassemble cat, on top of a picture of a cat tower, or a cat condo">
+          <img class="fragment current-visible" data-fragment-index="2" height="600" width="800" src="assets/cat.svg"
+            alt="The docassemble cat, with a window opening into its side to reveal that the python logo inside the cat">
+          <img class="fragment current-visible" data-fragment-index="3" height="600" width="800"
+            src="assets/cat_community.svg" alt="A group of six docassemble cats, facing each other">
+          <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg"
+            alt="The docassemble cat, under an umbrella on the sandy beach">
+        </div>
+
+        <aside class="notes">
+          So to start off, why should you hack on docassemble internals?
+      
+          There are a lot of reasons to do so. First, there are bugs in docassemble. 
+          It's a big program, does a ton of things, and
+          sometimes bugs slip in. If you find them, you can fix them yourself; there's nothing
+          stopping you. It definitely would help out
+          Jonathan Pyle (the creator of docassemble), and save him from having fix them himself. 
+
+          Additionally, you can add new features or improve the docassemble playground, improving the authoring experience.
+
+          As you hack on Docassemble and look around the code, you'll learn how docassemble works.
+          You'll pull back the curtain and see that it's really just a lot of python, like 
+          you're using in your docassemble interviews. The more knowledge you have about how docassemble is running internally,
+          the better a developer you can be.
+
+          Anytime you like make your changes, you can contribute them
+          back to the main code base. Then everyone in the docassemble community can benefit from your work.
+          
+          Lastly, I just think it's just fun to hack around. It has the same kind of tangible
+          experience of writing a docassemble interview or running a simple program, and seeing your code working and running. 
+          It's exciting! 
+        </aside>
+      </section>
+      <section>
+        <h2>Here comes the <span class="hacker">firehose</span></h2>
+        <img class="r-stretch" src="assets/cat_firehose.svg"
+          alt="The docassemble cat with a red fire hose, spraying a forceful blast of water" />
+        <p>Don't memorize all of this: it's <a href="https://docassemble.org/docs/development.html#core">in the docs</a>
+        </p>
+        <aside class="notes">
+          Docassemble is a really big
+          piece of software, and has a lot of different moving parts, so this presentation is going to be a fire hose. When I
+          first ran through these slides, it took about 45 minutes. I do not have 45 minutes now! So there's a lot of
+          things that I'm going to try and skim over. Hopefully it's still understandable to most folks; if not don't
+          worry. Don't try to memorize any of this; all of these concrete steps are in the documentation, so you can always go back
+          walk through these specific steps. Even if you walk away only remembering one new thing from this presentation,
+          then this presentation was a success.
+        </aside>
+      </section>
+      <section>
           <h2>Some starting assumptions:</h2>
           <ul>
-            <li class="fragment" data-fragment-index="0"><a href="https://docassemble.org/docs/helloworld.html">docassemble</a></li>
-            <li class="fragment" data-fragment-index="1"><a href="https://www.python.org/about/gettingstarted/">python</a></li>
+            <li class="fragment" data-fragment-index="0"><a
+                href="https://docassemble.org/docs/helloworld.html">docassemble</a></li>
+            <li class="fragment" data-fragment-index="1"><a
+                href="https://www.python.org/about/gettingstarted/">python</a></li>
             <li class="fragment" data-fragment-index="2">Folder structures</li>
             <!--li>git?</li-->
           </ul>
           <aside class="notes">
-            You'll have to know how to use docassemble to come up with ways to improve it!
-
-            You probably know enough python to follow along; basic functions, modules, and types like strings
-
-            You don't really need to know git, but it is something that I'm not gonna have time to cover. I'd
-            recommend using VSCode's git extension, and there are a few good UIs for it that you could try out.
+           So a few things I'm going to assume you, the reader, have;
+           <ul>
+            <li>
+           some experience with docassemble. If you've written a docassemble interview, administered a docassemble server, or ran
+           your own docassemble server, it helps to sort of have somebody have a bit of background knowledge on just what
+           docassemble is.
+            </li>
+            <li>
+          a little bit of python knowledge; if you've made a
+          docassemble interview, you probably know enough; If you know what a variable is and you know how to
+          call a function, you know enough to start poking around docassemble's code. You won't know
+          everything, but that's okay.
+            </li>
+            <li>
+          knowledge about how files and folders are structured on computers
+            </li>
+           </ul>
+          If you don't have any of these starting assumptions, don't worry. All of the links in these slides will 
+          help you starting out. 
           </aside>
-          </section>
         </section>
         <section>
           <h2>Don't have time to cover:
@@ -97,16 +151,21 @@
           <ul>
             <li><a href="https://docs.github.com/en/get-started/quickstart/contributing-to-projects">GitHub</a></li>
             <li><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics">HTML</a></li>
-	    <li><a href="https://learn-bash.org/">Terminal / Shell / Bash</a></li>
+	          <li><a href="https://learn-bash.org/">Terminal / Shell / Bash</a></li>
           </ul>
-        </section>
+        <aside class="notes">
+          Here are a whole bunch of things that I had to cut from this session; links are here if you want to learn them yourself.
+          We'll be running terminal commands, but we'll treat them as things to copy paste, you don't need to understand bash itself.
+        </aside>
         </section>
         <section>
             <h2>Install an editor</h2>
-            <p>I recommend <a href="https://docs.github.com/en/get-started/quickstart/contributing-to-projects" https://code.visualstudio.com/">VSCode</a>, but anything works</p>
+            <p>I recommend <a href="https://code.visualstudio.com/">VSCode</a>, but anything works</p>
             <img height="500" src="assets/vscode.png" alt="A screenshot of visual studio code editor">
             <aside class="notes">
-              On windows, VSCode can access your code in WSL, which is where we put it.
+          The first thing you want to do when hacking on docassemble is install an
+          editor. You can do it in something as simple as notepad, but I recommend VS code. It's still very bare bones. But it has a
+          large community around it, and there are like a lot of tutorials on how to get started. 
             </aside>
         </section>
         <section>
@@ -116,6 +175,12 @@
             <li>Windows:<a href="https://learn.microsoft.com/en-us/windows/wsl/install">Setup WSL 2</a></li>
           </ul>
           <img src="assets/Capture.PNG" alt="A screenshot of the Windows terminal, with the message 'Hello Docacon!'">
+        <aside class="notes">
+          Next you'll need a terminal to run the commands to start, restart, and update docassemble. On
+          Linux and Mac you can use your default terminals, and on Windows I highly recommend setting up WSL 2,
+          which stands for "Windows subsystem for Linux" (it just runs Linux on Windows, which is very nice). It's
+          what I'll be using for this presentation.
+        </aside>
         </section>
         <section>
             <h2>Download Docassemble</h2>
@@ -124,40 +189,86 @@
               sudo apt install git
               git clone https://github.com/jhpyle/docassemble
             </code></pre>
-        </section>
-        <section>
-          <h2>Install <span class="hacker">Docker</span></h2>
-          <ul>
-            <li><a href="https://docs.docker.com/engine/install/ubuntu/">Ubuntu Linux</a></li>
-            <li><a href="https://docs.docker.com/desktop/install/mac-install/">Mac</a></li>
-            <li><a href="https://docs.docker.com/desktop/install/windows-install/">Windows</a>
-              <ul>
-                <li><a href="https://docs.docker.com/desktop/install/ubuntu/">install on WSL's Ubuntu</a> (Recommended)</li>
-                <li><a href="https://docs.docker.com/desktop/install/windows-install/">With docker desktop</a></li>
-              </ul>
-            </li>
-          </ul>
-          <aside class="notes">
-            We'll start with it already installed and the docker container running, but still talk about these here.
-          </aside>
-        </section>
-        <!--section>
+        <aside class="notes">
+          The first thing you'll do is download docassemble.
+          If you're on Linux or WSL 2, the first command installs git, which is the "git" in
+          GitHub. For our purposes, git is a tool for getting the code from GitHub onto your
+          machine. The "clone" command does just that. It'll grab all of docassemble source code from GitHub and just
+          download it to your machine.
+        </aside>
+      </section>
+      <section>
+        <h2>Install <span class="hacker">Docker</span></h2>
+        <ul>
+          <li><a href="https://docs.docker.com/engine/install/ubuntu/">Ubuntu Linux</a></li>
+          <li><a href="https://docs.docker.com/desktop/install/mac-install/">Mac</a></li>
+          <li><a href="https://docs.docker.com/desktop/install/windows-install/">Windows</a>
+            <ul>
+              <li><a href="https://docs.docker.com/desktop/install/ubuntu/">install on WSL's Ubuntu</a> (Recommended)
+              </li>
+              <li><a href="https://docs.docker.com/desktop/install/windows-install/">With docker desktop</a></li>
+            </ul>
+          </li>
+        </ul>
+        <aside class="notes">
+          We'll start with it already installed and the docker container running, but still talk about these here.
+          Once we have all the that code on a machine we need to actually run it and make sure anything we change on
+          that code will be reflected and in docassemble.So we're first going to set up Docker. Docker has a whole bunch
+          of ways to set it up (instructions all linked here again). If you're on Windows which I will be as I am um I I
+          and if you're using WSL too like I'm recommending um you can just follow the instructions for installing
+          Docker on Ubuntu and it's pretty straightforward there's also an option for Docker desktop which is a little
+          bit easier to approach it's sort of a normal program, that you might run on your Windows machine
+          but you got to be a bit careful because it has a few terms; you have to be a small company like under 250
+          people or make like less than some amount I don't remember the exact amount of money per year otherwise it's
+          not free and you have to suddenly start paying for it. So you have to sort of be aware of that but either
+          either works and if you're a smaller company or it's just you you're totally fine to use Docker desktop as
+          well. 
+        </aside>
+      </section>
+      <!--section>
           <h2>Make your <span class="hacker">Fork</span> on GitHub</h2>
         </section-->
-        <section>
-          <h2><span class="hacker">Docker</span> terminology</h2>
-          <ul>
-            <li class="fragment" data-fragment-index="0">container</li>
-            <li class="fragment" data-fragment-index="1">image</li>
-            <li class="fragment" data-fragment-index="2">volume</li>
-          </ul>
-          <div class="r-stack">
-          <img class="fragment current-visible" data-fragment-index="0" height="400" src="assets/virtual-box-screenshot.png" alt="A screenshot of Virtual Box, running Ubuntu Linux on a Windows computer">
-          <img class="fragment current-visible" data-fragment-index="1" height="400" src="assets/macos-folder-icon2.jpg" alt="A nested tree of folders">
-          <img class="fragment" data-fragment-index="2" height="400" src="assets/flash-drive.jpeg" alt="An image of a flash drive">
-          </div>
-        </section>
-        <!--section>
+      <section>
+        <h2><span class="hacker">Docker</span> terminology</h2>
+        <ul>
+          <li class="fragment" data-fragment-index="0">container</li>
+          <li class="fragment" data-fragment-index="1">image</li>
+          <li class="fragment" data-fragment-index="2">volume</li>
+        </ul>
+        <div class="r-stack">
+          <img class="fragment current-visible" data-fragment-index="0" height="400"
+            src="assets/virtual-box-screenshot.png"
+            alt="A screenshot of Virtual Box, running Ubuntu Linux on a Windows computer">
+          <img class="fragment current-visible" data-fragment-index="1" height="400" src="assets/macos-folder-icon2.jpg"
+            alt="A nested tree of folders">
+          <img class="fragment" data-fragment-index="2" height="400" src="assets/flash-drive.jpeg"
+            alt="An image of a flash drive">
+        </div>
+        <aside class="notes">
+          So what even is Docker? If you've ever run docassemble you've probably run some of these commands and
+          you might not have any idea what they're doing um which is fair because
+          Docker is really kind of complicated. But we can break it down and we'll start off with just knowing that
+          Docker is a (not exactly technically correct) but it's very similar to a virtual machine. so if you've ever
+          run um run something like Virtualbox or VMware or bootcamp on your Mac
+          um where you're running a Windows machine inside of your own computer so it's just a little like Inception
+          where you're running a computer on your computer and Docker is essentially doing the same thing; it's running
+          a different computer on your own computer.
+          And specifically we call that little running computer that's inside of your own a container. And I'll try and
+          use that now so I don't have to say computer 20 times. There's also something called an image, which is all of
+          the files that you need to actually run that container. So on this machine which is the presenters machine, I
+          can open File Explorer and I can go to my C drive and this is every single file on on this computer. And
+          that's really just all
+          an image is, it's every single file that you need to run um that you need to run the container somewhere else
+          that you can download and it can be stored on your computer somewhere. But it's just every single file you
+          need finally there's a volume and there are a few different types of volumes in Docker but the one we're going
+          to use is a bit like a flash drive so same way in a flash drive you can plug it into your computer and you can
+          see some more additional files that aren't stored on your computer but are stored somewhere else. In a similar
+          way, a Docker volume is like a little flash drive
+          that you can plug into the container and access some files from somewhere else in this case it'll be files on
+          the on our main computer that the container can just access from there and only those specific files. 
+        </aside>
+      </section>
+      <!--section>
           <h2>Shell terminology</h2>
 
           <ul>
@@ -172,10 +283,10 @@
           <img class="fragment" height="600" width="800" src="assets/cat-on-beach2.svg" alt="The docassemble logo, a black cat, with a window opening into its side to reveal that the python logo inside the cat">
           </div>
         </section-->
+      <section>
+        <h2>Run <span class="harkec">Docker</span></h2>
         <section>
-          <h2>Run <span class="harkec">Docker</span></h2>
-          <section>
-            <pre><code data-trim data-noescape class="language-bash" data-line-numbers="1|2-9|5|7">
+          <pre><code data-trim data-noescape class="language-bash" data-line-numbers="1|2-9|5|7">
               docker pull jhyple/docassemble
               docker run \
                   --env WWWUID=`id -u` \
@@ -186,22 +297,38 @@
                   -d \
                   jhpyle/docassemble
             </code></pre>
-          </section>
-          <section>
-            <h3>Some extra tips</h3>
-            <pre><code data-trim data-noescape class="language-bash">
+            <aside class="notes">
+          So now
+          that we've figured out a bit of what Docker is and we've installed our docassemble source code, we can
+          actually run Docker. So this First Command (docker pull) will download the docker image onto your container.
+          So remember that's all of the files that you'll need to run docassemble. And then this next command
+          actually starts the container; you can ignore about most of this.
+          You'll still need it but you don't really need to understand it. But there are a few important parts; the
+          first one is that we're going to name our container. Docker lets you give things names. The names it gives
+          them by default are okay, but they're like combinations of adjectives and scientists and it's just confusing
+          and they change every time. So we're going to name ours
+          mydocassemble. And then this next line that I'm highlighting, line seven, is the actual volume. So you don't
+          have to quite know the syntax yet, but on this left side that's the docassemble folder that's the folder that
+          we downloaded a few screens ago when we ran git clone. And going back um on the right side slash temp slash
+          docassemble. That's just a folder inside of the docassemble container that now has all the all the files on
+          your computer under the docassemble folder. 
+            </aside>
+        </section>
+        <section>
+          <h3>Some extra tips</h3>
+          <pre><code data-trim data-noescape class="language-bash">
                 docker run \
                     --cap-add SYS_PTRACE \
                     --memory="4gb" \
                     ... # same as before
             </code></pre>
-          </section>
         </section>
-        <!--section>
+      </section>
+      <!--section>
           <h2>Our example: more font awesome</h2>
           https://github.com/jhpyle/docassemble/pull/614/files
         </section-->
-        <!--section>
+      <!--section>
           <h2>Shell Commands</h2>
 
           <ul>
@@ -210,7 +337,7 @@
             <li class="fragment">"pwd" means "print working directory" (or current directory)</li>
           </ul>
         </section-->
-        <!--section>
+      <!--section>
           <h2>Hello world!</h2>
           <section>
             <h3>Edit a prominent page</h3>
@@ -220,44 +347,124 @@
             </div>
           </section>
         </section-->
+      <section>
+        <h2>Our change: <span class="hacker">more logs</span></h2>
+        <img height="500" src="assets/logs-page-pre.png">
+        <aside class="notes">
+          So now that we've now that we have everything set up,
+          we're gonna we're gonna run wild and do a live demo. I'm gonna do my share my whole screen
+
+            So first off we'll go ahead and, let's figure out something to actually change
+            on docassemble we'll first
+
+            um to make it sort of a bit simple, if you've ever used docassemble, you've probably looked at the logs at
+            some point. The logs are really useful and they tell you like what's going on if something ever goes wrong
+            on docs- yes, is something not sharing? sorry [incomprehensible from audience] okay and yes this should be
+            sharing on the Zoom. um cool sorry we are actually screen sharing. So but yeah if you've ever used the
+            docassemble server you've probably looked at the logs before um and it shows the last 30 Lines by default.
+            Let's say we want to change that to 60.
+            So a really simple change it might be, it might be a bit useful if we don't have to always download the
+            whole file to look at a bit more lines. And it's pretty straightforward,
+        </aside>
+      </section>
+      <section>
         <section>
-          <h2>Our change: <span class="hacker">more logs</span></h2>
-          <img height="500" src="assets/logs-page-pre.png">
-        </section>
-        <section>
-          <section>
           <h2>The Key components to <span class="hacker">hacking</span></h2>
           <ul>
             <li>Exploring and Navigating the code</li>
             <li>reading the code</li>
             <li>surgical change</li>
           </ul>
-          </section>
-          <section>
-            <h2>Live demo backup</h2>
-
-          <div class="r-stack">
-          <img class="fragment fade-out" data-fragment-index="0" height="550" src="assets/only-last-search.png" 
-              alt="A screen shot of 'Only the last 30 lines' in the VS Code search bar, with results below">
-          <img class="fragment current-visible" data-fragment-index="0" height="300" src="assets/only-last-file.png" 
-              alt="A screenshot of the `logs.html` file, that contains the words 'Only the last 30 lines'">
-          <img class="fragment current-visible" data-fragment-index="1" height="250" src="assets/logs-search.png" 
-              alt="A screenshot of the VS code search bar, this time with 'logs.html' in it">
-          <img class="fragment current-visible" data-fragment-index="2" height="550" src="assets/logs-file.png" 
-              alt="The code in `server.py` in the `logs` function">
-          <img class="fragment" height="550" src="assets/logs-60.png"
-              alt="The same code as above, but changed to include the last 60 lines instead of the last 30">
-          </div>
-          </section>
+          <aside class="notes">
+             but first off we
+            have to actually figure where figure out where in docasemble to make this change.And this is where I had um
+            this is where I want us to if you if you take away one thing from this um one thing from this presentation I
+            want you to take away the three components of hacking which are exploring and navigating the code, reading
+            the code, and then making a
+            really surgical small change that you need to. And just repeating all of those each of those three things
+            and the one that's really daunting in my opinion is exploring and navigating the code
+          </aside>
         </section>
         <section>
-          <section>
-            <h3>Open a shell in docassemble</h3>
-            <pre><code data-trim data-noescape class="language-bash">
+          <h2>Live demo backup</h2>
+
+          <div class="r-stack">
+            <img class="fragment fade-out" data-fragment-index="0" height="550" src="assets/only-last-search.png"
+              alt="A screen shot of 'Only the last 30 lines' in the VS Code search bar, with results below">
+            <img class="fragment current-visible" data-fragment-index="0" height="300" src="assets/only-last-file.png"
+              alt="A screenshot of the `logs.html` file, that contains the words 'Only the last 30 lines'">
+            <img class="fragment current-visible" data-fragment-index="1" height="250" src="assets/logs-search.png"
+              alt="A screenshot of the VS code search bar, this time with 'logs.html' in it">
+            <img class="fragment current-visible" data-fragment-index="2" height="550" src="assets/logs-file.png"
+              alt="The code in `server.py` in the `logs` function">
+            <img class="fragment" height="550" src="assets/logs-60.png"
+              alt="The same code as above, but changed to include the last 60 lines instead of the last 30">
+          </div>
+          <aside class="notes">
+            so let's go ahead and
+            I've got docassemble installed or downloaded from git onto my machine I'm going to go ahead and open up my
+            copy of VS Code
+            and we'll and then if you've if you've ever looked around in the docassemble source code, there's just a lot
+            of it. And again, docassemble is a really big program; it's doing a lot of different things. And it can be
+            really intimidating to figure out what's happening where and where are all of these, like where's the exact,
+            what's happening when I visit logs the logs URL on docassemble where what code's running when I do that. And
+            the key a key thing that I use all the time when I'm trying to patch things in
+            docassemble is whatever page I'm on I look for some bit of text that could show me that it's likely in the
+            source code. So we see this last, this last line, "only the last 30 lines are shown", if that's being shown
+            on the screen, it's somewhere in the code likely. Especially this very specific text line. So let's go ahead
+            and, in visual Visual Studio just expand that out a bit, Let's search for only the last 30 lines.
+            So we can see, we come up with a few different results and this happens a lot; you're never going to find
+            only the one, you're rarely
+            going to find only the one place that this particular thing is in the code. But if you kind of glance around
+            at these first results you'll see: okay there's English text on the right and oh there's German on the left
+            and this is the translation file. And if you're searching for things that show up on the um show up in the
+            UI you'll see a lot of results from different translation files in Spanish and German etc. but you keep
+            going and sort of glance through all of them you'll see one that is very useful that is logs.html and and
+            HTML is the thing that you're looking at in your browser so we have found it; we have found the page that
+            actually is displaying the logs. And that's and that's sort of the main like a main way that you can go
+            about navigating code like this. (starting to get a bit of an echo) Um so yeah and so and so now but now we
+            now we have word blogs.html is but we need to figure out where there's
+            this is just an HTML file and it has it has a few things if you've ever um edited a DOCX template and
+            docassemble, you'll you'll see these sort of two curly braces looks pretty similar and that's because the
+            HTML is using the same templating language Jinja as the DOCX template as as your DOCX templates are and so
+            it's a lot more familiar than you might think um but we still need to figure out where the python code
+            actually is that uses this logs.html. So we're going to use our secret trick again and we're going to search
+            for logs.html
+            And this time we're a lot luckier! There's one place that logs.html is in the source code um and it's in
+            this fairly long function, but if we scroll to the top we do see it's just the python function. Like um if
+            you've like and if you if we know we know how python functions work; you call them and you return something
+            and that's all that's happening here, is there's flask which is what docassemble is running on whenever you
+            visit that particular URL in your server flask calls the function for you, and then returns the actual HTML
+            to show to the user.
+            And we can see right at the very bottom, render_templates if we noticed back on this page the right above
+            only the last 30 lines is all of the actual logs that we're looking at. All of these are the actual logs
+            that we want to change what's being shown there. And so right above this is this text area and this jinja
+            template that uses the variable content.
+            We go back to our to our function that's a running when we visit logs, we see that
+            the content content variable is being set to content. We can sort of go up a bit we can see that there's
+            just a variable in this in this python function that's being set to content backtrack a little bit more we
+            can see that lines is being used to set that variable, and so you can essentially look up and see: oh here's
+            something called Tailer, tailer.tail opens a file and notably there's the number 30 a few different times.
+            This is our line! And this is sort of the best way that I sort of you find what you find what you want in
+            the
+            docassemble code you sort of follow the string one line at a time. And it's really intimidating to open a
+            twenty two thousand line long file, but just focus on the stuff the few lines that you're interested in
+            you're good to go. So let's make our change so we wanted to show a bit more than 30 lines let's show 60
+            lines instead so we'll change that 30 to 60. and then we'll actually go back into the logs HTML and we'll
+            say
+            that we're we'll tell people that we're showing 60 lines instead as well.
+
+          </aside>
+        </section>
+      </section>
+      <section>
+        <section>
+          <h3>Open a shell in docassemble</h3>
+          <pre><code data-trim data-noescape class="language-bash">
                 docker exec -it mydocassemble /bin/bash
             </code></pre>
-            The prompt will change to "root@a54e5b3:/#"
-            <pre><code data-trim data-noescape class="language-bash">
+          The prompt will change to "root@a54e5b3:/#"
+          <pre><code data-trim data-noescape class="language-bash">
                 su www-data
                 source /usr/share/docassemble/local3.10/bin/activate
                 cd /tmp/docassemble
@@ -266,41 +473,94 @@
                     ./docassemble_base ./docassemble_webapp ./docassemble_demo ./docassemble
                 touch /usr/share/docassemble/webapp/docassemble.wsgi
             </code></pre>
-          </section>
-        </section>
-        <section>
-          <h2>And so much more!</h2>
-          <ul>
-            <li class="fragment">going past surface level Flask and git</li>
-            <li class="fragment">Other systems in docassemble: pikepdf, sqlalchemy, redis, celery</li>
-            <li class="fragment">You don't have to learn it all at once!</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Reach out on Slack; go forth and <span class="hacker">hack</span></h2>
+          <aside class="notes">
 
-          <img src="assets/lion-king-cat.jpg">
-        </section>
-			</div>
-		</div>
+            And so now that we've made our change in docassemble, we need to actually run those changes um and update
+            our running server to use those changes. These are and this is sort of a bit more of Bash, so a bit more
+            command line terminal commands we're going to run um and you can copy those you can copy those right now,
+            but essentially they're just making another terminal inside of the docker container that we're already
+            running. So mydocassemble and bash. And if you notice you don't have I'm skipping over a lot of terminal
+            stuff right now so don't worry um but if you notice the left side it used to say brycew@lt-bwilley, just the
+            name of my laptop from Suffolk, and it now says root@this really weird string. That just means we're now
+            inside of our
+            running our our container, which remember is a different computer, so of course it's going to say it's a
+            different computer than my laptop. And once we're here we'll run those few other commands which we need to.
+            Which we need to actually sort of just tell our terminal, "hey we're going to be using this version of
+            python and we're going to go over to this particular folder and from there we're going to copy these these
+            last two commands are the most important and they are this pip install which actually updates-
+            okay just do it there um- this pip install command which actually reinstalls all of docassemble's code. So
+            we follow all the way through; I've got some docassemble code on my computer, it's being plugged into a
+            volume into the docker container, and inside the docker container we're telling it to take all of that code
+            from the volume: "reinstall it". In the same way that you would reinstall something like a normal program on
+            your computer like Firefox or Chrome when you update it. I believe it's still installing and successfully
+            installed! So once we've once we've installed it the very last command is this touch command, which we will
+            run
+            right now and that touch command just restarts docassemble such that it can use the new code
+            so we press the on off button on docassemble um or the reset button and if we wait a few seconds we should
+            um we'll wait a few seconds for seconds seconds for it to reload and we'll see that this last line will say
+            only the last
+            60 lines are shown and I don't actually know if I have 60 lines and logs on this particular um instance of
+            docassemble because I just started it this morning, but if actually we can go up to something like access
+            which is generally a lot longer and we'll see that it's showing a whole lot more lines than than it was
+            before and we can see that the little bit of text that we changed there at the bottom is being shown.
+            You've, we have now all of us y'all are (y'all are doing this too) have successfully made your first change
+            to docassemle's core which is really neat.
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
-				center: true,
-				transitionSpeed: 'fast',
-        // Uncomment after presentation
-        // showNotes: true,
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+          </aside>
+        </section>
+      </section>
+      <section>
+        <h2>And so much more!</h2>
+        <ul>
+          <li class="fragment">going past surface level Flask and git</li>
+          <li class="fragment">Other systems in docassemble: pikepdf, sqlalchemy, redis, celery</li>
+          <li class="fragment">You don't have to learn it all at once!</li>
+        </ul>
+        <aside class="notes">
+
+          And this is just the beginning; there's a whole lot more you can do. um I've mentioned get and I mentioned
+          flask both of those programs go a lot more in depth and there's a lot more detail to how they work um there
+          are just tons of other different things in docassemble, like Pike PDF, SQLAlchemy, redis etc. But the good
+          news is that even though there are all these different things you don't have to learn all of this at once like
+          I said I've I've spent the last two and a half years doing this and I did not know anything when I started I
+          knew none of these these programs listed on this screen right here but each time you do you go in you search
+          for what you're looking for and you really closely read the few lines you want ignore everything else,
+          ignore as much as you can, And you learn those lines and you get a little bit more knowledge and then you come
+          back again and you'll know a bit more docassemble.
+        </aside>
+      </section>
+      <section>
+        <h2>Reach out on Slack; go forth and <span class="hacker">hack</span></h2>
+
+        <img src="assets/lion-king-cat.jpg">
+      </section>
+      <aside class="notes">
+
+        So I know I like I said this is a fire hose feel free to reach out on slack to either myself, Jonathan is always
+        helpful with these sorts of things, I ask them questions about the internal code all the time so reach out on
+        slack and go forth and hack remember everything that is in the GitHub source code is your kingdom thank you
+        [Applause]
+      </aside>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+      center: true,
+      transitionSpeed: 'fast',
+      showNotes: true,
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
+</body>
+
 </html>
